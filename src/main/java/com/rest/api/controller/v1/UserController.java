@@ -23,6 +23,7 @@ public class UserController {
     private final UserJpaRepo userJpaRepo;
     private final ResponseService responseService;
 
+
     @Schema(name = "회원리스트 조회", description = "모든 회원을 조회한다")
     @GetMapping(value = "/user")
     public List<User> findAllUser() {
