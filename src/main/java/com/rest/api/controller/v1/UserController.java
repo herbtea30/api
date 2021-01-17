@@ -6,9 +6,12 @@ import com.rest.api.model.response.CommonResult;
 import com.rest.api.model.response.SingleResult;
 import com.rest.api.repo.UserJpaRepo;
 import com.rest.api.service.ResponseService;
+import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.Parameter;
+import io.swagger.v3.oas.annotations.media.Content;
 import io.swagger.v3.oas.annotations.media.Schema;
 import io.swagger.v3.oas.annotations.responses.ApiResponse;
+import io.swagger.v3.oas.annotations.responses.ApiResponses;
 import io.swagger.v3.oas.annotations.tags.Tags;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.*;
@@ -30,7 +33,13 @@ public class UserController {
         return userJpaRepo.findAll();
     }
 
-    @Schema(name = "회원 단건 조회", description = "userId로 회원을 조회한다")
+    @Operation(summary = "Get a User by msrl")
+    @ApiResponses( value = {
+            @ApiResponse(responseCode = "200", description = "Found a User", content = {
+                    @Content(mediaType = "application/json", schema = @Schema(implementation = User.class))
+            }),
+            @ApiResponse(responseCode = "404", description = "User Not Found", content = @Content)
+    })
     @GetMapping(value = "/user/{msrl}")
     public SingleResult<User> findUserById(@Parameter(name = "msrl", description = "회원번호", required = true) @PathVariable long msrl,
                                            @Parameter(name = "lang", description = "언어", example = "ko") @RequestParam String lang) throws Exception {
